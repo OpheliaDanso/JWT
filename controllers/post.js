@@ -2,7 +2,8 @@ const Post = require("../schemas/Post");
 
 const getAllPost = async (req, res) => {
   try {
-    const posts = await Post.find();
+    const user_id = req.user_id;
+    const posts = await Post.find({ user_id });
     if (!posts.length) {
       return res.status(200).json({ message: "No post found" });
     }
@@ -25,7 +26,8 @@ const createPost = async (req, res) => {
     return res.status(400).json({ error: "Please fill all fields" });
   }
   try {
-    const post = await Post.create({ title, body });
+    const user_id = req.user_id;
+    const post = await Post.create({ title, body, user_id });
     res.status(200).json(post);
   } catch (error) {
     res.status(500).json({ error: error.message });
